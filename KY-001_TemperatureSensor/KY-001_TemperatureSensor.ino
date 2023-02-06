@@ -4,7 +4,7 @@
  *
  * Code contributions by David Schmidt and user biTTOE.
  *
- * Lesson 1 - [KY-001] Temperature Sensor
+ * Lesson - [KY-001] Temperature Sensor
  *
  * The KY-001 is a simple temperature sensor module that measures ambient temperature using
  * a DS18B20 digital thermometer chip.  The DS18B20 is a 1-Wire digital thermometer chip that
