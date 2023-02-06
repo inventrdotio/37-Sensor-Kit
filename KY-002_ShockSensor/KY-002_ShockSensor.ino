@@ -11,19 +11,19 @@
  * Code contributions by David Schmidt
  */
 
-// Need a Digital pin.
-// On the Hero (Arduino Uno compatible) we *could* use: D0-D13, A0-A5.
-// Skip: A0-A5 (save for Analog),
-//       D0/D1 (used by USB),
-//       D2/D3 (save for interrupts),
-//       D13 (used by LED_BUILTIN and SPI Clock),
-//       D5, D6, D9, D10 and D11 (save for PWM)
-//       D11 (SPI MOSI)
-//       D12 (SPI MISO)
-// Recommended for least conflicts:
-//    D4, D7 or D8
+/* This project just needs a Digital pin.
+ * On the Hero (Arduino Uno compatible) we *could* use: D0-D13, A0-A5.
+ * Skip: A0-A5 (save for Analog),
+ *       D0/D1 (used by USB),
+ *       D2/D3 (save for interrupts),
+ *       D13 (used by LED_BUILTIN and SPI Clock),
+ *       D5, D6, D9, D10 and D11 (save for PWM)
+ *       D11 (SPI MOSI)
+ *       D12 (SPI MISO)
+ * Recommended for fewest conflicts:
+ *    D4, D7 or D8
+ */
 const uint8_t KY_002_PIN = 10;        // Good digital pin not used for other purposes
-const uint8_t led_pin = LED_BUILTIN;  // Built in LED defined for each Arduino device
 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);  // define LED as output interface

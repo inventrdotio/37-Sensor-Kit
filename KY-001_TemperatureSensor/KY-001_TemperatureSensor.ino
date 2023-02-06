@@ -24,17 +24,18 @@
 
 #define DEBUG false  // Set to false and use Serial Plotter for graph of all temperatures
 
-// Need a Digital pin.
-// On the Hero (Arduino Uno compatible) we *could* use: D0-D13, A0-A5.
-// Skip: A0-A5 (save for Analog),
-//       D0/D1 (used by USB),
-//       D2/D3 (save for interrupts),
-//       D13 (used by LED_BUILTIN and SPI Clock),
-//       D5, D6, D9, D10 and D11 (save for PWM)
-//       D11 (SPI MOSI)
-//       D12 (SPI MISO)
-// Recommended for least conflicts:
-//    D4, D7 or D8
+/* This project just needs a Digital pin.
+ * On the Hero (Arduino Uno compatible) we *could* use: D0-D13, A0-A5.
+ * Skip: A0-A5 (save for Analog),
+ *       D0/D1 (used by USB),
+ *       D2/D3 (save for interrupts),
+ *       D13 (used by LED_BUILTIN and SPI Clock),
+ *       D5, D6, D9, D10 and D11 (save for PWM)
+ *       D11 (SPI MOSI)
+ *       D12 (SPI MISO)
+ * Recommended for fewest conflicts:
+ *    D4, D7 or D8
+ */
 const uint8_t KY_001_PIN = 4;   // Good digital pin not used for other purposes
 
 // Use OneWire library to communicate with KY-001's DS18S20 temperature chip
