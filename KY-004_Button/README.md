@@ -3,7 +3,7 @@
 <img src="KY-004_Button2.png" width="100">
 <img src="KY-004_Button3.jpg" width="150">
 
-The KY-003 is a magnetic Hall-effect sensor. It can detect the presence of a magnetic field and output an electrical signal proportional to the strength of the magnetic field. The sensor operates by using the Hall effect, which is the production of a voltage difference across an electrical conductor, transverse to an electric current in the conductor and a magnetic field perpendicular to it. The KY-003 is typically used in various applications such as detecting the position of a rotating magnet, or as a switch triggered by a magnet.
+The KY-004 is a simple tactile button module for use with Arduino or other microcontrollers. It consists of a push button switch and a resistor to pull the input high when the button is not pressed. When the button is pressed, the input is connected to ground, providing a low signal to the microcontroller. The module provides a convenient and compact way to add a physical button input to a microcontroller project.
 
 # Wiring diagram
 <img src="KY-004_ButtonWiring.png" width="350">
