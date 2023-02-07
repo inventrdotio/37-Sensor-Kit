@@ -1,4 +1,4 @@
-# KY-003 Hall Magnetic Sensor
+# KY-004 Button
 <img src="KY-004_Button.jpg" width="200">
 <img src="KY-004_Button2.png" width="100">
 <img src="KY-004_Button3.jpg" width="150">
