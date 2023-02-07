@@ -8,7 +8,8 @@
  * or movements in a variety of applications, such as detecting doors opening and
  * closing or detecting knocks on a table.
  *
- * Code contributions by David Schmidt
+ * Code contributions:
+ *    David Schmidt (davids@inventr.io)
  */
 
 /* This project just needs a Digital pin.

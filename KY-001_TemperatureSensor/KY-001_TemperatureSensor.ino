@@ -18,6 +18,10 @@
  *
  * Library requirements:
  * Install OneWire library from Arduino IDE library manager
+ *
+ * Code contributions:
+ *    David Schmidt (davids@inventr.io)
+ *    biTToe (scy1961@yahoo.com)
  */
 
 #include <OneWire.h>  // OneWire library

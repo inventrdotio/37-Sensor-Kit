@@ -14,7 +14,7 @@
  *
  * KY-003 sensor pin is HIGH until a magenetic field is detected, when sensor pin goes LOW.
  *
- * Code contributions by David Schmidt (davids@tower-mt.com)
+ * Code contributions by David Schmidt (davids@inventr.io)
  */
 
 /* This project just needs a Digital pin.
@@ -29,7 +29,7 @@
  * Recommended for fewest conflicts:
  *    D4, D7 or D8
  */
-int KY_003_PIN = 10;  // define the Hall magnetic sensor interface
+const uint8_t KY_003_PIN = 10;  // define the Hall magnetic sensor interface
 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);       // define LED as output interface
