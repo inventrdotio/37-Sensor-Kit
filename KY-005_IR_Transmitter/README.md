@@ -24,3 +24,8 @@ The resistor helps to limit the current going to the IR LED, protecting it from 
 
 # Library
 Likely to use IRremote library by shirriff, z3go and ArminJo
+
+# Sample tutorial.
+https://www.circuitbasics.com/arduino-ir-remote-receiver-tutorial/
+
+Good project using one Hero is to wire IR Receiver and IR Transmitter.  Point Transmitter towards a user's device.  Have the user send a code from their remote to the program, and then use an external button to send that same code to their device with a delay.

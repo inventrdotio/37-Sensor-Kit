@@ -2,7 +2,7 @@
  * inventr.io 37 in 1 Sensor Kit (https://inventr.io/product/37-in-1-sensor-kit/)
  * Sensor Course (https://inventr.io/course/sensor-training/)
  *
- * Lesson - [KY-003] Hall Magnetic Sensor
+ * Lesson - [KY-004] Button
  *
  * The KY-004 is a simple tactile button module for use with Arduino or other
  * microcontrollers. It consists of a push button switch and a resistor to pull
@@ -31,19 +31,14 @@
  */
 const int KY_004_PIN = 4;  // the number of the pushbutton pin
 
-int buttonState = 0;  // variable for reading the pushbutton status
-
 void setup() {
-  pinMode(LED_BUILTIN, OUTPUT);  // built in LED is an OUTPUT
-  pinMode(KY_004_PIN, INPUT_PULLUP);    // Button is an input
+  pinMode(LED_BUILTIN, OUTPUT);       // built in LED is an OUTPUT
+  pinMode(KY_004_PIN, INPUT_PULLUP);  // Button is an input
 }
 
 void loop() {
-  // read the state of the pushbutton value:
-  buttonState = digitalRead(KY_004_PIN);
-
-  if (digitalRead(KY_004_PIN) == LOW)        // if button is pressed, state is LOW (false)
-    digitalWrite(LED_BUILTIN, HIGH);  // turn on built in LED
+  if (digitalRead(KY_004_PIN) == LOW)  // if button is pressed, state is LOW (false)
+    digitalWrite(LED_BUILTIN, HIGH);   // turn on built in LED
   else
     digitalWrite(LED_BUILTIN, LOW);  // turn off built in LED
 }
