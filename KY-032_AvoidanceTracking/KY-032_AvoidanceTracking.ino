@@ -34,23 +34,27 @@
  * Library requirements:
  * None
  *
-.-------------------------------.
-> Avoidance tracker Calibration <
-:---------------------------------------------------------------------------------------:
-| To get this to work you have to adjust both the output and input potentiometers (POTs).
-|
-| The POT on the right, which sits just below the EN jumper, adjusts the LED output.
-| -Turn this clockwise (to the right) as far as it will go. 
-|
-| The POT on the left adjusts sensor sensitivity.
-| -Turn this as far counterclockwise (to the left) as it will go.
-| -Place your hand or some other flat object about 4″ (~10cm) above the sensor.
-| -SLOWLY turn the POT clockwise (right) until the LED on the PCB comes on and the serial output says “obstacle in the way”
-|
-| There is a small range for detection but With a little finesse, gentle nudging, and tweaking
-| of the POT you should be able to get a detection range between 0 and ~10″ (~25cm).
-| You really have to play with the detection sensitivity to get it to work reliably and consistently
-:---------------------------------------------------------------------------------------:
+ * Code contributions:
+ *    David Schmidt (davids@inventr.io)
+ *    biTToe (scy1961@yahoo.com)
+ * 
+ * .-------------------------------.
+ * > Avoidance tracker Calibration <
+ * :---------------------------------------------------------------------------------------:
+ * | To get this to work you have to adjust both the output and input potentiometers (POTs).
+ * |
+ * | The POT on the right, which sits just below the EN jumper, adjusts the LED output.
+ * | -Turn this clockwise (to the right) as far as it will go. 
+ * |
+ * | The POT on the left adjusts sensor sensitivity.
+ * | -Turn this as far counterclockwise (to the left) as it will go.
+ * | -Place your hand or some other flat object about 4″ (~10cm) above the sensor.
+ * | -SLOWLY turn the POT clockwise (right) until the LED on the PCB comes on and the serial output says “obstacle in the way”
+ * |
+ * | There is a small range for detection but With a little finesse, gentle nudging, and tweaking
+ * | of the POT you should be able to get a detection range between 0 and ~10″ (~25cm).
+ * | You really have to play with the detection sensitivity to get it to work reliably and consistently
+ * :---------------------------------------------------------------------------------------:
  *
  * This project uses: 
  * One Digital pin to INPUT (object detection).
@@ -66,30 +70,31 @@
  * Recommended for fewest conflicts:
  *    D4, D7 or D8
  */
-const uint8_t KY_032_SENSOR_PIN = 8;   // set sensor output to a digitial pin 
-// If you want the ability to enable and disable the sensor manually 
-// you must remove the EN jumper and 
-// Assign the EN pin to a digital pin:
-//    const uint8_t KY_032_ENABLE_PIN = 5; 
+const uint8_t KY_032_SENSOR_PIN = 8;  // set sensor output to a digitial pin
+
+// If you want the ability to enable and disable the sensor manually
+// you must remove the EN jumper on the module and
+// assign the EN pin to a digital pin:
+//    const uint8_t KY_032_ENABLE_PIN = 5;
 // Set the pin mode
 //    pinMode(KY_032_ENABLE_PIN, OUTPUT);
-// Read the value of the ENABLE pin
-//    int KY_032_enable = digitalRead(KY_032_ENABLE_PIN);
+// Enable the device by writing HIGH to KY_032_ENABLE_PIN
+//    digitalWrite(KY_032_ENABLE_PIN, HIGH);
 
 void setup() {
   Serial.begin(9600);
-  pinMode(KY_032_SENSOR_PIN, INPUT);// set pin as input  
+  pinMode(KY_032_SENSOR_PIN, INPUT);  // set pin as input
 }
 
 void loop() {
-  
-  if (digitalRead(KY_032_SENSOR_PIN == LOW) { // could also be written if(!digitalRead(KY_032_SENSOR_PIN){
-    Serial.println("Obstacle in the way");
 
-  } else {
+  if (digitalRead(KY_032_SENSOR_PIN == LOW)) // could also be written if(!digitalRead(KY_032_SENSOR_PIN)
+    Serial.println("Obstacle in the way");
+  else
     Serial.println("The path is clear");
-  }
+
   delay(250);
+
   /* 
    *To see what the sensor is writing to the Hero board
    * Uncomment the two Serial.print lines below 
@@ -99,5 +104,5 @@ void loop() {
   */
 
   // Serial.print("\nKY_032_SENSOR_PIN = "); // Print the digital output of the sensor for debugging purposes
-  // Serial.println(digitalRead(KY_032_SENSOR_PIN);  
+  // Serial.println(digitalRead(KY_032_SENSOR_PIN);
 }
