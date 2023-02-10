@@ -8,17 +8,19 @@
  *
  *
  * KY-032 is an infrared (IR) obstacle avoidance sensor
- * The module consists of an IR transmitter and receiver that can KY_32_state
+ * The module consists of an IR transmitter and receiver that can detect
  * the presence of an object in front of the sensor by measuring the reflection
  * of the IR light. It has a functional range between 2cm and 40cm
  *
  * The sensor outputs a digital signal that can be read by a microcontroller
  * to determine the presence or absence of an obstacle. 
  *
- ** LIKE MANY OF THE SIMPLE DIGITAL SENSORS IN THIS KIT
+ ** like many of the digital sensors in this kit
  ** The default state of this sensor is HIGH when it is idle
- ** When there is NOTHING detected the digital output == HIGH == TRUE == 1 
- ** When the sensor detects an obstacle the digital output == LOW == FALSE == 0
+ ** When there is NOTHING detected the digital output will be HIGH, 
+ ** which can also be represented as "true" or 1
+ ** When the sensor detects an obstacle the digital output will be LOW, 
+ ** which can also be represented by "false" or 0
  *
  * The KY-032 has one jumper (EN) and 4 pins: GND, +, out, EN.
  *
@@ -29,18 +31,13 @@
  * a HIGH (enable) or LOW (disable) signal to the EN pin
  * a HIGH signal will enable the sensor and a LOW signal will disable it.
  * 
- *
  * Library requirements:
  * None
- *
- * Code contributions:
- *    David Schmidt (davids@inventr.io)
- *    Frank Visco (bittoe@yahoo.com)
  *
 .-------------------------------.
 > Avoidance tracker Calibration <
 :---------------------------------------------------------------------------------------:
-| To get this to work you have to adjust both the output and input potentiometers (POT).
+| To get this to work you have to adjust both the output and input potentiometers (POTs).
 |
 | The POT on the right, which sits just below the EN jumper, adjusts the LED output.
 | -Turn this clockwise (to the right) as far as it will go. 
@@ -69,31 +66,38 @@
  * Recommended for fewest conflicts:
  *    D4, D7 or D8
  */
-const uint8_t KY_032_PIN_OUT = 8;   // set sensor output to a digitial pin 
+const uint8_t KY_032_SENSOR_PIN = 8;   // set sensor output to a digitial pin 
 // If you want the ability to enable and disable the sensor manually 
 // you must remove the EN jumper and 
 // Assign the EN pin to a digital pin:
-//    const uint8_t KY_032_PIN_EN = ; 
+//    const uint8_t KY_032_ENABLE_PIN = 5; 
 // Set the pin mode
-//    pinMode(KY-032_PIN_EN, OUTPUT);
-// Read the value of the OUTPUT pin
-//    int KY_032_enable = digitalRead(KY_032_PIN_EN);
+//    pinMode(KY_032_ENABLE_PIN, OUTPUT);
+// Read the value of the ENABLE pin
+//    int KY_032_enable = digitalRead(KY_032_ENABLE_PIN);
 
 void setup() {
-Serial.begin(9600);
-pinMode(KY_032_PIN_OUT, INPUT);// set pin as input
+  Serial.begin(9600);
+  pinMode(KY_032_SENSOR_PIN, INPUT);// set pin as input  
 }
 
 void loop() {
-  int KY_032_state = digitalRead(KY_032_PIN_OUT);  // read sensor state and store it into "KY_032_state"
   
-  if (KY_032_state == LOW) {                       // This could also be written if(!KY_032_state){
+  if (digitalRead(KY_032_SENSOR_PIN == LOW) { // could also be written if(!digitalRead(KY_032_SENSOR_PIN){
     Serial.println("Obstacle in the way");
 
   } else {
     Serial.println("The path is clear");
   }
-  Serial.print("\nKY-032 output = "); // Print the digital output of the sensor for debugging purposes
-  Serial.println(KY_032_state);  
   delay(250);
+  /* 
+   *To see what the sensor is writing to the Hero board
+   * Uncomment the two Serial.print lines below 
+   * KY_032_SENSOR_PIN = 1 | No object detected
+   * KY_032_SENSOR_PIN = 0 | Object detected
+   * This information is also useful during calibration
+  */
+
+  // Serial.print("\nKY_032_SENSOR_PIN = "); // Print the digital output of the sensor for debugging purposes
+  // Serial.println(digitalRead(KY_032_SENSOR_PIN);  
 }
