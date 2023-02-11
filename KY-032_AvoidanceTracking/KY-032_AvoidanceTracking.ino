@@ -88,11 +88,11 @@ void setup() {
 
 void loop() {
 
-  if (digitalRead(KY_032_SENSOR_PIN == LOW)) // could also be written if(!digitalRead(KY_032_SENSOR_PIN)
+  if (digitalRead(KY_032_SENSOR_PIN) == LOW) {  // could also be written if(!digitalRead(KY_032_SENSOR_PIN))
     Serial.println("Obstacle in the way");
-  else
+  } else {
     Serial.println("The path is clear");
-
+  }
   delay(250);
 
   /* 
@@ -104,5 +104,5 @@ void loop() {
   */
 
   // Serial.print("\nKY_032_SENSOR_PIN = "); // Print the digital output of the sensor for debugging purposes
-  // Serial.println(digitalRead(KY_032_SENSOR_PIN);
+  // Serial.println(digitalRead(KY_032_SENSOR_PIN));
 }
