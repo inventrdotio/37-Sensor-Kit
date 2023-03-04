@@ -7,7 +7,6 @@
  *    biTToe        (bittoe@yahoo.com)
  * Lesson - [KY-024] Linear Hall
  *
- *
  * The KY-024 linear hall effect sensor is a type of magnetic sensor
  * that measures the strength and direction of a magnetic field. It works
  * based on the Hall effect, which states that when a magnetic field is applied
@@ -24,7 +23,7 @@
  * Additionally, it has a linear response to the magnetic field, meaning that the
  * output voltage changes linearly with the magnetic field strength, making it ideal for
  * applications that require accurate and reliable measurements.
- 
+ *
  * Comments by biTToe:
  *
  * Each sensor is equipped with:
@@ -107,26 +106,24 @@
  *    Analog pin:  A0-A5
  */
 
-const uint8_t KY_024_DIGITAL_OUT = 8; // digital sensor
-const uint8_t KY_024_ANALOG_OUT = A0; // analog sensor
-int ky024_Dval;
-int ky024_Aval;
+const uint8_t KY_024_DIGITAL_OUT = 8;  // digital sensor
+const uint8_t KY_024_ANALOG_OUT = A0;  // analog sensor
 
 void setup() {
   Serial.begin(9600);
-  pinMode(LED_BUILTIN, OUTPUT); // define LED_BUILTIN as output interface
+  pinMode(LED_BUILTIN, OUTPUT);  // define LED_BUILTIN as output interface
 }
+
 void loop() {
-  ky024_Dval = digitalRead(KY_024_DIGITAL_OUT); // Reads digital value & sets pin as input
-  ky024_Aval = analogRead(KY_024_ANALOG_OUT);   // Reads analog value & sets pin as input
-  if (ky024_Dval == HIGH)  // (S) on FRONT or (N) on BACK of sensor
-  {
+  int ky024_Dval = digitalRead(KY_024_DIGITAL_OUT);  // Reads digital value & sets pin as input
+  int ky024_Aval = analogRead(KY_024_ANALOG_OUT);    // Reads analog value & sets pin as input
+
+  if (ky024_Dval == HIGH) // (S) on FRONT or (N) on BACK of sensor
     digitalWrite(LED_BUILTIN, HIGH);
-  } else                   // (N) on the FRONT or (S) on the BACK of sensor
-  {
+  else                    // (N) on the FRONT or (S) on the BACK of sensor
     digitalWrite(LED_BUILTIN, LOW);
-  }
-  delay(150);  // change this value to pole the sensor more or less often
+  delay(150);             // change this value to pole the sensor more or less often
+
   /*
    * To see what the sensor is writing to the Hero board
    * Uncomment the Serial.print lines below
@@ -137,5 +134,4 @@ void loop() {
   // Serial.print(" | ");
   // Serial.print("Analog value: ");
   // Serial.println(ky024_Aval);
-
 }
