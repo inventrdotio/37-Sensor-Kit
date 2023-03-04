@@ -1,64 +1,141 @@
 /*
-          .————————————.
-| Linear (analog) hall effect switch |
-| –                                - |
-| – ANALOG pin returns strength &.   |
-| – polarity of the magnetic field   |
-| – DIGITAL pin returns only the     |
-| – magnetic polarity of the field   |
-| – You MUST set the pinMode of BOTH |
-| – the analog and digital pins,     |
-| – Otherwise dig_val is ALWAYS == 0 |
-           :————————————:
-Comments by biTToe:
+ * inventr.io 37 in 1 Sensor Kit (https://inventr.io/product/37-in-1-sensor-kit/)
+ * Sensor Course (https://inventr.io/course/sensor-training/)
+ *
+ * Code contributions:
+ *    David Schmidt (davids@inventr.io)
+ *    biTToe        (bittoe@yahoo.com)
+ * Lesson - [KY-024] Linear Hall
+ *
+ *
+ * The KY-024 linear hall effect sensor is a type of magnetic sensor
+ * that measures the strength and direction of a magnetic field. It works
+ * based on the Hall effect, which states that when a magnetic field is applied
+ * perpendicular to a current-carrying conductor, a voltage is generated
+ * proportional to the magnetic field strength.
+ *
+ * The KY-024 sensor is used in various applications, including linear positioning,
+ * linear speed sensing, and linear current sensing. It's a compact, low-cost,
+ * and easy-to-use device that can interface with microcontrollers like Arduino and Raspberry Pi.
+ * Many laptops & tablets use a hall effect switch to determine the position of the lid (open or closed)
+ *
+ * The KY-024 sensor outputs an analog voltage signal proportional to the strength of the
+ * magnetic field it's exposed to, making it easy to read and process the data.
+ * Additionally, it has a linear response to the magnetic field, meaning that the
+ * output voltage changes linearly with the magnetic field strength, making it ideal for
+ * applications that require accurate and reliable measurements.
+ 
+ * Comments by biTToe:
+ *
+ * Each sensor is equipped with:
+ * Two output pins: digital (DO) and analog (AO).
+ * Two on-board LEDs: Power (LED1) & Threshold (LED2)
+ *
+ * When the intensity of the signal is GREATER than the set threshold:
+ ** DO == 1, AO < 500, LED2 is ON
+ * When the intensity of the signal is LESS than the set threshold:
+ ** DO == 0, AO > 500, LED2 is OFF
+ * KY-024 is sensitive to BOTH fiels strenght and polarity
+ *
+ * With no magnet nearby:
+ * the analog output (AO) is ~512
+ * The digital output (DO) is 0
+ * LED2 is OFF
+ *
+ * For the TOP of the sensor:
+ * As the NORTH POLE of a magnet approaches the TOP/FRONT side of the sensor
+ ** the ANALOG output INCREASES (AO > 512) 
+ ** the DIGITAL output is 0 (DO == 0).
+ ** LED2 is OFF
+ *
+ * As the NORTH POLE of a magnet approaches the BOTTOM/BACK side of the sensor
+ ** the ANALOG output DECREASES (AO < 512)
+ ** the DIGITAL output is 1 (DO == 1).
+ ** LED2 is ON
+ *
+ * With the SOUTH POLE of the magnet the above outputs are reversed.
+ * Get a magnet and play around.
+ *
+ ** N.B.
+ *
+ * You can use HIGH, 1, true interchangably
+ * You can use LOW, 0, false interchangably
+ * but you should be consistent
+ *
+ * There are seven sensors in this kit that have 
+ * a red PCB and a blue potentiometer
+ * KY-024 LinearHall  | KY-036 TouchSensor
+ * KY-025 ReedSwitch  | KY-037 BigSoundSensor
+ * KY-026 FlameSensor | KY-038 SmallSoundSensor
+ * KY-027 LightCup
+ *
+ * They all function in exactly the same way and use exactly the same code,
+ * albeit with different variable names. 
+ *
+ * Each sensor is equipped with:
+ * two output pins: digital (DO) and analog (AO).
+ * Two on-board LEDs: Power (LED1) & Threshold (LED2)
 
-Many laptops use the hall effect switch to determine the position of the lid (open or closed) It is more reliable than a mechanical switch.
+ * When the intensity of the signal is GREATER than the set threshold:
+ * DO == 1, AO < 500, LED2 is ON
+ 
+ * When the intensity of the signal is LESS than the set threshold:
+ * DO == 0, AO > 500, LED2 is OFF
+ 
+ * The analog pin output (AO) is a range from 0 to 1023  
+ * The digital pin output (DO) is either 0 or 1
+ * These are sensors that detects a physical signal: noise, heat, magnetic field... etc
+ * Each sensor has a limited range of detection and assigns 0 to no signal.
+ * and 1023 to the strongest signal. They are not calibrated in any meaningfuly way.
+ * They are detectors as opposed to calibrated sensors; their outputs are not meant to
+ * be converted to functional units (dB, degrees, lumens, Teslas... etc)
+ *
+ * This project uses: 
+ * One Digital pin to OUTPUT (HIGH or LOW)
+ * One Analog pin to OUTPUT (Magnetic field strength & polarity)
+ * The onboard LED
+ * On the Hero (Arduino Uno compatible) we *could* use: D0-D13, A0-A5.
+ * Skip: A0-A5 (can use for any ANALOG pin),
+ *       D0/D1 (used by USB),
+ *       D2/D3 (save for interrupts),
+ *       D13 (used by LED_BUILTIN and SPI Clock),
+ *       D5, D6, D9, D10 and D11 (save for PWM)
+ *       D11 (SPI MOSI)
+ *       D12 (SPI MISO)
+ * Recommended for fewest conflicts:
+ *    Digital pin: D4, D7 or D8
+ *    Analog pin:  A0-A5
+ */
 
-The cool thing about this switch is that it has two sensors.
-The analog sensor returns both field strength and polarity
-The digital sensor returns only polarity.
-
-With no magnet nearby:
-the analog value is ~512 | range 0 – 1023 ideally
-The digital value is 0 (LOW)
-
-For the FRONT side of the sensor:
-As the north pole of a magnet approaches the FRONT side of the sensor, the analog output value INCREASES (>512) and the digital output is LOW.
-
-As the south pole of a magnet approaches the FRONT side of the sensor, the analog output value DECREASES (<512) and the digital output is HIGH.
-
-For the BACK side of the sensor it is just the opposite.
-
-Get a magnet and play around.
-Here is my code with better variable names and better comments IMHO
-*/
-
-int led = 13;        // onboard led
-int digitalPin = 3;  // digital sensor
-int analogPin = A0;  // analog sensor
-int dig_val;
-int ana_val;
+const uint8_t KY_024_DIGITAL_OUT = 8; // digital sensor
+const uint8_t KY_024_ANALOG_OUT = A0; // analog sensor
+int ky024_Dval;
+int ky024_Aval;
 
 void setup() {
   Serial.begin(9600);
-  pinMode(led, OUTPUT);        // define led as output interface
-  pinMode(digitalPin, INPUT);  // define digital pin as input
-  pinMode(analogPin, INPUT);   // define analog pin as input
+  pinMode(LED_BUILTIN, OUTPUT); // define LED_BUILTIN as output interface
 }
 void loop() {
-  dig_val = digitalRead(digitalPin);  // Get digital value
-  ana_val = analogRead(analogPin);    // Get analog value
-  if (dig_val == HIGH)                // (S) on FRONT or (N) on BACK of sensor
+  ky024_Dval = digitalRead(KY_024_DIGITAL_OUT); // Reads digital value & sets pin as input
+  ky024_Aval = analogRead(KY_024_ANALOG_OUT);   // Reads analog value & sets pin as input
+  if (ky024_Dval == HIGH)  // (S) on FRONT or (N) on BACK of sensor
   {
-    digitalWrite(led, HIGH);
-  } else  // (N) on the BACK or (S) on the FRONT of sensor
+    digitalWrite(LED_BUILTIN, HIGH);
+  } else                   // (N) on the FRONT or (S) on the BACK of sensor
   {
-    digitalWrite(led, LOW);
+    digitalWrite(LED_BUILTIN, LOW);
   }
-  Serial.print("Digital Value: ");
-  Serial.println(dig_val);
-  Serial.print("Analog value: ");
-  Serial.println(ana_val);
-  Serial.print("\n\n");
-  delay(1000);
+  delay(150);  // change this value to pole the sensor more or less often
+  /*
+   * To see what the sensor is writing to the Hero board
+   * Uncomment the Serial.print lines below
+   * This information is also useful during calibration
+   */
+  // Serial.print("Digital Value: ");
+  // Serial.print(ky024_Dval);
+  // Serial.print(" | ");
+  // Serial.print("Analog value: ");
+  // Serial.println(ky024_Aval);
+
 }
