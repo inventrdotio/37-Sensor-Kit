@@ -81,11 +81,17 @@
  * When the intensity of the signal is LESS than the set threshold:
  * DO == 0, AO > 500, LED2 is OFF
  
- * The analog pin output (AO) is a range from 0 to 1023  
+ * The analog pin output (AO) is a range from 0 to 1023
  * The digital pin output (DO) is either 0 or 1
  * These are sensors that detects a physical signal: noise, heat, magnetic field... etc
- * Each sensor has a limited range of detection and assigns 0 to no signal.
- * and 1023 to the strongest signal. They are not calibrated in any meaningfuly way.
+ * Each sensor has a limited range of detection. 
+ *
+ * ** THE STRONGER THE SIGNAL, THE LOWER THE Analog Value -Closer to 0 **
+ * ** THE WEAKER THE SIGNAL, THE HIGHER THE Analog Value -Closer to 1024 **
+ * ** (AO) LESS THAN ~512 triggers (DO) to 1
+ * ** (AO) GREATER than ~512 triggers (DO) to 0
+ *
+ * These sensors are not calibrated in any meaningfuly way.
  * They are detectors as opposed to calibrated sensors; their outputs are not meant to
  * be converted to functional units (dB, degrees, lumens, Teslas... etc)
  *
