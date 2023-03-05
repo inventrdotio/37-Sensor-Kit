@@ -125,9 +125,9 @@ void loop() {
    * Uncomment the Serial.print lines below
    * This information is also useful during calibration
    */
-  // Serial.print("Digital Value: ");
-  // Serial.print(ky025_Dval);
-  // Serial.print(" | ");
-  // Serial.print("Analog value: ");
-  // Serial.println(ky025_Aval);
+//   Serial.print("Digital Value: ");
+//   Serial.print(ky025_Dval);
+//   Serial.print(" | ");
+//   Serial.print("Analog value: ");
+//   Serial.println(ky025_Aval);
 }
