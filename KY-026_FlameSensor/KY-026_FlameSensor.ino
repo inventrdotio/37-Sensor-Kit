@@ -113,17 +113,19 @@
  *    Analog pin:  A0-A5
  */
 
-const uint8_t KY_026_DIGITAL_OUT = 8;  // digital sensor
-const uint8_t KY_026_ANALOG_OUT = A0;  // analog sensor
+const uint8_t KY_026_DIGITAL_IN = 8;  // digital sensor
+const uint8_t KY_026_ANALOG_IN = A0;  // analog sensor
 
 void setup() {
   Serial.begin(9600);
   pinMode(LED_BUILTIN, OUTPUT);  // define LED_BUILTIN as output interface
+  pinMode(KY_026_DIGITAL_IN, INPUT);
+  pinMode(KY_026_ANALOG_IN, INPUT);
 }
 
 void loop() {
-  int ky026_Dval = digitalRead(KY_026_DIGITAL_OUT);  // Reads digital value & sets pin as input
-  int ky026_Aval = analogRead(KY_026_ANALOG_OUT);    // Reads analog value & sets pin as input
+  int ky026_Dval = digitalRead(KY_026_DIGITAL_IN);  // Reads digital value & sets pin as input
+  int ky026_Aval = analogRead(KY_026_ANALOG_IN);    // Reads analog value & sets pin as input
 
   if (ky026_Dval == HIGH) // (S) on FRONT or (N) on BACK of sensor
     digitalWrite(LED_BUILTIN, HIGH);
