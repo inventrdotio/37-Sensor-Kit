@@ -102,21 +102,23 @@
  *    Analog pin:  A0-A5
  */
 
-const uint8_t KY_025_DIGITAL_OUT = 8;  // digital sensor
-const uint8_t KY_025_ANALOG_OUT = A0;  // analog sensor
+const uint8_t KY_025_DIGITAL_IN = 8;  // digital sensor
+const uint8_t KY_025_ANALOG_IN = A0;  // analog sensor
 
 void setup() {
   Serial.begin(9600);
-  pinMode(LED_BUILTIN, OUTPUT);  // define LED_BUILTIN as output interface
+  pinMode(LED_BUILTIN, OUTPUT);      // define LED_BUILTIN as output interface
+  pinMode(KY_025_DIGITAL_IN, INPUT); // define digital pin as input interface
+  pinMode(KY_025_ANALOG_IN, INPUT);  // define analog pin as input interface
 }
 
 void loop() {
-  int ky025_Dval = digitalRead(KY_025_DIGITAL_OUT);  // Reads digital value & sets pin as input
-  int ky025_Aval = analogRead(KY_025_ANALOG_OUT);    // Reads analog value & sets pin as input
+  int ky025_Dval = digitalRead(KY_025_DIGITAL_IN); // Reads digital value
+  int ky025_Aval = analogRead(KY_025_ANALOG_IN);   // Reads analog value
 
-  if (ky025_Dval == HIGH) // (S) on FRONT or (N) on BACK of sensor
+  if (ky025_Dval == HIGH) // Magnetic field detected
     digitalWrite(LED_BUILTIN, HIGH);
-  else                    // (N) on the FRONT or (S) on the BACK of sensor
+  else                    // No Magnetic field detected
     digitalWrite(LED_BUILTIN, LOW);
   delay(150);             // change this value to pole the sensor more or less often
 
