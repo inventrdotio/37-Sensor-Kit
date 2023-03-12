@@ -56,7 +56,7 @@
  * KY-024 LinearHall  | KY-036 TouchSensor
  * KY-025 ReedSwitch  | KY-037 BigSoundSensor
  * KY-026 FlameSensor | KY-038 SmallSoundSensor
- * KY-027 LightCup
+ * KY-028 DigitalTempSensor
  *
  * They all function in exactly the same way and use exactly the same code,
  * albeit with different variable names.
