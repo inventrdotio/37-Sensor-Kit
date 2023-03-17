@@ -1,83 +1,146 @@
 /*
-.————————————-.
-| Digital Temp Switch
-|
-| Digital and analog outputs:
-| + dig_val: 0/1 TRUE/FALSE HIGH/LOW
-| –HIGH when ana_val ~510
-|
-| + ana_val : 0 – 1023
-| –Decreases as temp increases
-| –set trigger point w/ potentiometer
-|
-| – You MUST set the pinMode of BOTH
-| – the analog and digital pins,
-| – Otherwise dig_val is ALWAYS == 0
-:————————————-:
+ * inventr.io 37 in 1 Sensor Kit (https://inventr.io/product/37-in-1-sensor-kit/)
+ * Sensor Course (https://inventr.io/course/sensor-training/)
+ *
+ * Code contributions:
+ *    David Schmidt (davids@inventr.io)
+ *    biTToe        (bittoe@yahoo.com)
+ * Lesson - [KY-028] digital temperature sensor
+ *
+ * The KY-028 module is equiped with an NTC Thermistor
+ * An NTC thermistor is a resistor with a Negative Temperature Coefficient.
+ * Having a negative temperature coefficient means its resistance decreases
+ * with increasing temperature and vice-versa.
+ * Therefor:
+ * As temperature INCREASES, the output value of the analog sensor DECREASES.
+ *
+ * The module comes with a small potentiometer that can be adjusted to set
+ * the temperature threshold (TRIGGER POINT), allowing the user to trigger
+ * events or actions when the temperature goes above or below a certain point.
+ *
+ *+-+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+ *|          CALIBRATION
+ *| This is a sensor-switch. It functions more like a thermostat
+ *| It is not really set up to be used as a thermometer. 
+ *| 
+ *| To calibrate this sensor, un-comment the Serial.print
+ *| lines at the end of the sketch and run.
+ *| The Analog value will be somewhere between 0 & 1023
+ *| The Digital Value will be 1 if the analog value is LESS than ~510
+ *| The Digital Value will be 0 if the analog value is GREATER than ~510
+ *| 
+ *| Set the trigger point by adjusting the small screw on
+ *| the blue potentiometer; this will change the analog
+ *| output (sensitivity): Clockwise DECREASES Analog Value,
+ *| Counterclockwise INCREASES Analog Value. When the
+ *| Analog Value is LESS than about 510 the Digital
+ *| Value should change from 0 to 1. This is your trigger point.
+ *|
+ *| To fine tune the sensitivity, observe LED2 on the sensor.
+ *| When LED2 is ON you have crossed the threshold. Adjust
+ *| the potentiometer so your trigger-point is consistent
+ *| and reliable.
+ *+-+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+ *
+ * What can we do with this?
+ *
+ * Let’s say you have a computer case that you don’t want the temperature to go above 100deg F.
+ * All you have to do is CALIBRATE the sensor by placing it in a “box” where the temperature
+ * is a stable 100deg F. Then dial the potentiometer until you reach the *trigger point*
+ *
+ * When the sensor returns to regular ambient temperatures (as long as it’s cooler than 100deg F)
+ * the analog output will be greater than 511.
+ *
+ * Install the sensor in the computer case and run the computer. As the temperature in the case
+ * increases the analog output value will decrease. When that value is 510 or less, the
+ * digital output will change from 0 (LOW) to 1 (HIGH). You can use this change to trigger
+ * a fan or some other cooling device to reduce the temperature inside the case.
+ * 
+ ** N.B.
+ *
+ * You can use HIGH, 1, true interchangeably
+ * You can use LOW, 0, false interchangeably
+ * but you should be consistent
+ *
+ * There are seven sensors in this kit that have
+ * a red PCB and a blue potentiometer
+ * KY-024 LinearHall  | KY-036 TouchSensor
+ * KY-025 ReedSwitch  | KY-037 BigSoundSensor
+ * KY-026 FlameSensor | KY-038 SmallSoundSensor
+ * KY-028 DigitalTempSensor
+ *
+ * They all function in exactly the same way and use exactly the same code,
+ * albeit with different variable names.
+ *
+ * Each sensor is equipped with:
+ * two output pins: digital (DO) and analog (AO).
+ * Two on-board LEDs: Power (LED1) & Threshold (LED2)
 
-  Comments by biTTOE:
-  This is a sensor-switch.
-  It is not really set up to be used as a thermometer. It’s really more like a thermostat
+ * When the intensity of the signal is GREATER than the set threshold:
+ * DO == 1, AO < ~500, LED2 is ON
+ 
+ * When the intensity of the signal is LESS than the set threshold:
+ * DO == 0, AO > ~500, LED2 is OFF
+ 
+ * The analog pin output (AO) is a range from 0 to 1023
+ * The digital pin output (DO) is either 0 or 1
+ * These are sensors that detects a physical signal: noise, heat, magnetic field... etc
+ * Each sensor has a limited range of detection. 
+ *
+ * ** THE STRONGER THE SIGNAL, THE LOWER THE Analog Value -Closer to 0 **
+ * ** THE WEAKER THE SIGNAL, THE HIGHER THE Analog Value -Closer to 1024 **
+ * ** (AO) LESS THAN ~512 triggers (DO) to 1
+ * ** (AO) GREATER than ~512 triggers (DO) to 0
+ *
+ * These sensors are not calibrated in any meaningful  way.
+ * They are detectors as opposed to calibrated sensors; their outputs are not meant to
+ * be converted to functional units (dB, degrees, lumens, Teslas... etc)
+ *
+ * This project uses:
+ * One Digital pin to OUTPUT (HIGH or LOW)
+ * One Analog pin to OUTPUT (Magnetic field strength & polarity)
+ * The onboard LED
+ * On the Hero (Arduino Uno compatible) we *could* use: D0-D13, A0-A5.
+ * Skip: A0-A5 (can use for any ANALOG pin),
+ *       D0/D1 (used by USB),
+ *       D2/D3 (save for interrupts),
+ *       D13 (used by LED_BUILTIN and SPI Clock),
+ *       D5, D6, D9, D10 and D11 (save for PWM)
+ *       D11 (SPI MOSI)
+ *       D12 (SPI MISO)
+ * Recommended for fewest conflicts:
+ *    Digital pin: D4, D7 or D8
+ *    Analog pin:  A0-A5
+ */
 
-  Like all of the sensors in this kit with a red PCB and a blue potentiometer, it has TWO outputs: one analog, one digital.
-
-  The digital output has two possible states: 1 or 0 (TRUE/FALSE, HIGH/LOW)
-  The analog output has a value between 0 & 1023, and a *SWITCHING POINT* for the digital switch between 510 & 511.
-
-  SO:
-  As temperature INCREASES, the output value of the analog sensor DECREASES.
-  When the analog output is 510 or LESS, the digital value is HIGH.
-  When the analog output is 511 or GREATER the digital value is LOW.
-
-  What can we do with this?
-
-  Let’s say you have a computer case that you don’t want the temperature to go above 90deg F.
-  All you have to do is CALIBRATE the sensor by placing it in a “box” where the temperature is a stable 90deg F. Then dial
-  the potentiometer until the analog output reads between 510-511. This is your *SWITCHING POINT*
-
-  When the sensor returns to regular ambient temperatures (as long as it’s cooler than 90deg F) the analog output will be
-  greater than 511, perhaps greater than 600 or more.
-
-  Install the sensor in the computer case and run the computer. As the temperature in the case increases the analog output
-  value will decrease. When that value is 510 or less then the digital output will change from 0 (LOW) to 1 (HIGH).
-
-  You could use this change to trigger a fan or some other cooling device to reduce the temperature in the case.
-
-  All the red PCB sensors in this kit work in this same way for whatever it is they are designed to detect.
-
-  You could use the reed switch to set some acceptable lever of magnetic field and have it trigger when the field exceeds
-  a defined magnitude, setting it up in the same manner as the temp sensor:
-
-  CALIBRATE the sensor, using the potentiometer, in a magnetic field that is at the threshold of unacceptable, then install
-  the sensor where you need it. If the magnetic field strength increases to the point where the analog output becomes less
-  than 510, the digital output will go to HIGH and you can use that to trigger a secondary event or alarm.
-*/
-
-int led = 13;        // onboard led
-int digitalPin = 3;  // digital sensor
-int analogPin = A0;  // analog sensor
-int dig_val;
-int ana_val = 0;
+const uint8_t KY_028_DIGITAL_IN = 8;  // digital sensor
+const uint8_t KY_028_ANALOG_IN = A0;  // analog sensor
 
 void setup() {
   Serial.begin(9600);
-  pinMode(led, OUTPUT);        // define led as output interface
-  pinMode(digitalPin, INPUT);  // define digital pin as input
-  pinMode(analogPin, INPUT);   // define analog pin as input
+  pinMode(LED_BUILTIN, OUTPUT);      // define LED_BUILTIN as output interface
+  pinMode(KY_028_DIGITAL_IN, INPUT); // define digital pin as input interface
+  pinMode(KY_028_ANALOG_IN, INPUT);  // define analog pin as input interface
 }
 
 void loop() {
-  dig_val = digitalRead(digitalPin);  // Get digital value
-  ana_val = analogRead(analogPin);    // Get analog value
-  if (dig_val == HIGH)                // * ANAout val 510 temp decrease
-    digitalWrite(led, HIGH);
-  else
-    digitalWrite(led, LOW);
+  int ky028_Dval = digitalRead(KY_028_DIGITAL_IN); // Reads digital value
+  int ky028_Aval = analogRead(KY_028_ANALOG_IN);   // Reads analog value
 
-  Serial.print("Digital Value: ");
-  Serial.println(dig_val);
-  Serial.print("Analog value: ");
-  Serial.println(ana_val, DEC);
-  Serial.print("\n\n");
-  delay(1000);
+  if (ky028_Dval == HIGH) // temperature GREATER than set threshold
+    digitalWrite(LED_BUILTIN, HIGH);
+  else                    // temperatire LESS than set threshold
+    digitalWrite(LED_BUILTIN, LOW);
+  delay(150);             // change this value to pole the sensor more or less often
+
+  /*
+   * To see what the sensor is writing to the Hero board
+   * Uncomment the Serial.print lines below
+   * This information is also useful during calibration
+   */
+  // Serial.print("Digital Value: ");
+  // Serial.print(ky028_Dval);
+  // Serial.print(" | ");
+  // Serial.print("Analog value: ");
+  // Serial.println(ky028_Aval);
 }
