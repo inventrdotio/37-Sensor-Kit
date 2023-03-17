@@ -5,7 +5,11 @@
  * Code contributions:
  *    David Schmidt (davids@inventr.io)
  *    biTToe        (bittoe@yahoo.com)
- * Lesson - [KY-037] digital temperature sensor
+ * Lesson - [KY-037] Big Sound Sensor
+ *
+ *** The KY-037 "Big Sound Sensor" & the KY-038 "Small Sound Sensor"
+ *** function EXACTLY the same. The only difference is in the size
+ *** and sensitivity of the microphones. 
  *
  * KY-037 is a module that is designed to detect sound intensity and convert
  * it into an analog voltage signal. It is also known as a big sound sensor
